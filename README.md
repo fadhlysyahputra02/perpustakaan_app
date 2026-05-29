@@ -1,7 +1,3 @@
-Masalahnya karena ada code block di dalam code block yang rusak tampilannya. Ini versi yang benar — copy dari bawah garis ini langsung:
-
----
-
 # Perpustakaan App — Flutter
 
 Aplikasi manajemen perpustakaan berbasis Flutter yang mengkonsumsi REST API dari [Golang-Perpustakaan-Restful-API](https://github.com/afrizal423/Golang-Perpustakaan-Restful-API).
@@ -131,7 +127,7 @@ cupertino_icons: ^1.0.2
 
 ```go
 // Sebelum
-AlamatPenerbit string  `json:"alamat_penerbit" validate:"required"`
+AlamatPenerbit string ` json:"alamat_penerbit" validate:"required"`
 // Sesudah
 AlamatPenerbit string `json:"alamat_penerbit" validate:"required"`
 ```
@@ -164,5 +160,3 @@ r.db.Preload("Anggota").Preload("Details.BukuDetail").First(...)
 Nama relasi salah menyebabkan HTTP 500 setiap kali endpoint `GET /admin/peminjaman/detail/:id` dipanggil.
 
 ---
-
-Kunci perbedaannya: struktur folder sekarang pakai **indentasi 4 spasi** (bukan triple backtick) supaya tidak konflik dengan code block lain di dalamnya. Di GitHub akan render rapi sebagai blok kode plain text.
