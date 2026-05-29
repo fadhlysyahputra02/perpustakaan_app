@@ -21,7 +21,7 @@ Aplikasi manajemen perpustakaan berbasis Flutter yang mengkonsumsi REST API dari
 | Penulis Buku |
 |---|
 | ![Penulis Buku](screenshots/penulisbuku.png) |
-```
+
 
 ---
 ## Stack
