@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/bg_painter.dart';
+import '../../models/buku_model.dart';
 import '../../providers/buku_provider.dart';
 import 'buku_detail_screen.dart';
 
@@ -27,19 +28,14 @@ class _BukuListScreenState extends State<BukuListScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         backgroundColor: AppTheme.primary,
-        title: const Text(
-          'Daftar Buku',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Daftar Buku',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
       ),
       body: Stack(
         children: [
-          // Background motif
-          Positioned.fill(
-            child: CustomPaint(painter: BgPainter()),
-          ),
+          Positioned.fill(child: CustomPaint(painter: BgPainter())),
           Consumer<BukuProvider>(
             builder: (context, provider, _) {
               if (provider.isLoading) {
@@ -55,11 +51,9 @@ class _BukuListScreenState extends State<BukuListScreen> {
                         Icon(Icons.error_outline,
                             color: AppTheme.error, size: 48),
                         const SizedBox(height: 12),
-                        Text(
-                          provider.error!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: AppTheme.error),
-                        ),
+                        Text(provider.error!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: AppTheme.error)),
                         const SizedBox(height: 16),
                         ElevatedButton.icon(
                           onPressed: () => provider.fetchAll(),
@@ -79,13 +73,9 @@ class _BukuListScreenState extends State<BukuListScreen> {
                       Icon(Icons.menu_book_rounded,
                           size: 64, color: AppTheme.primary.withOpacity(0.3)),
                       const SizedBox(height: 12),
-                      Text(
-                        'Belum ada data buku',
-                        style: TextStyle(
-                          color: AppTheme.onSurface,
-                          fontSize: 15,
-                        ),
-                      ),
+                      Text('Belum ada data buku',
+                          style: TextStyle(
+                              color: AppTheme.onSurface, fontSize: 15)),
                     ],
                   ),
                 );
@@ -102,8 +92,7 @@ class _BukuListScreenState extends State<BukuListScreen> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => BukuDetailScreen(buku: item),
-                      ),
+                          builder: (_) => BukuDetailScreen(buku: item)),
                     ),
                   );
                 },
@@ -117,10 +106,13 @@ class _BukuListScreenState extends State<BukuListScreen> {
 }
 
 class _BukuCard extends StatelessWidget {
-  final dynamic buku;
+  final Buku buku;
   final VoidCallback onTap;
 
-  const _BukuCard({required this.buku, required this.onTap});
+  const _BukuCard({
+    required this.buku,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +134,6 @@ class _BukuCard extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           child: Row(
             children: [
-              // Icon kiri
               Container(
                 width: 52,
                 height: 52,
@@ -150,14 +141,10 @@ class _BukuCard extends StatelessWidget {
                   color: AppTheme.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(
-                  Icons.menu_book_rounded,
-                  color: AppTheme.primary,
-                  size: 28,
-                ),
+                child: Icon(Icons.menu_book_rounded,
+                    color: AppTheme.primary, size: 28),
               ),
               const SizedBox(width: 14),
-              // Info tengah
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,21 +152,16 @@ class _BukuCard extends StatelessWidget {
                     Text(
                       buku.judulBuku,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        color: AppTheme.onBackground,
-                      ),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: AppTheme.onBackground),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      'ISBN: ${buku.isbn}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppTheme.onSurface,
-                      ),
-                    ),
+                    Text('ISBN: ${buku.isbn}',
+                        style:
+                            TextStyle(fontSize: 12, color: AppTheme.onSurface)),
                     const SizedBox(height: 6),
                     Row(
                       children: [
@@ -199,11 +181,7 @@ class _BukuCard extends StatelessWidget {
                   ],
                 ),
               ),
-              // Arrow kanan
-              Icon(
-                Icons.chevron_right_rounded,
-                color: AppTheme.primary.withOpacity(0.5),
-              ),
+              Icon(Icons.chevron_right_rounded, color: AppTheme.primary),
             ],
           ),
         ),
@@ -216,7 +194,6 @@ class _Badge extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
-
   const _Badge({required this.icon, required this.label, required this.color});
 
   @override
@@ -224,22 +201,16 @@ class _Badge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 11, color: color),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              color: color,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Text(label,
+              style: TextStyle(
+                  fontSize: 11, color: color, fontWeight: FontWeight.w500)),
         ],
       ),
     );

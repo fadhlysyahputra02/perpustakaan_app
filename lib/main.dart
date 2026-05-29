@@ -1,3 +1,4 @@
+// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
@@ -56,23 +57,13 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     super.initState();
+    // Cek token di background, tapi tidak block tampilan
     Future.microtask(() => context.read<AuthProvider>().checkLoginStatus());
   }
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthProvider>();
-
-    switch (auth.status) {
-      case AuthStatus.authenticated:
-        return const HomeScreen();
-      case AuthStatus.unauthenticated:
-      case AuthStatus.error:
-        return const LoginScreen();
-      default:
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
-    }
+    // Langsung tampilkan HomeScreen, auth status akan di-handle per fitur
+    return const HomeScreen();
   }
 }

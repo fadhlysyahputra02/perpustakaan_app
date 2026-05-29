@@ -13,16 +13,11 @@ class BukuDetailScreen extends StatelessWidget {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         backgroundColor: AppTheme.primary,
-        title: Text(
-          buku.judulBuku,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+        title: Text(buku.judulBuku,
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis),
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
       ),
@@ -58,77 +53,61 @@ class BukuDetailScreen extends StatelessWidget {
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Icon(
-                          Icons.menu_book_rounded,
-                          color: Colors.white,
-                          size: 32,
-                        ),
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(16)),
+                        child: const Icon(Icons.menu_book_rounded,
+                            color: Colors.white, size: 32),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              buku.judulBuku,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
+                            Text(buku.judulBuku,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16)),
                             const SizedBox(height: 4),
-                            Text(
-                              'ISBN: ${buku.isbn}',
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                              ),
-                            ),
+                            Text('ISBN: ${buku.isbn}',
+                                style: const TextStyle(
+                                    color: Colors.white70, fontSize: 13)),
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 16),
 
-                // Badge row
+                // Stat cards
                 Row(
                   children: [
                     Expanded(
                       child: _StatCard(
-                        icon: Icons.inventory_2_rounded,
-                        label: 'Stok',
-                        value: buku.stokBuku.toString(),
-                        color: AppTheme.primary,
-                      ),
+                          icon: Icons.inventory_2_rounded,
+                          label: 'Stok',
+                          value: buku.stokBuku.toString(),
+                          color: AppTheme.primary),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: _StatCard(
-                        icon: Icons.shelves,
-                        label: 'Rak',
-                        value: buku.rakBuku,
-                        color: const Color(0xFF00897B),
-                      ),
+                          icon: Icons.shelves,
+                          label: 'Rak',
+                          value: buku.rakBuku,
+                          color: const Color(0xFF00897B)),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: _StatCard(
-                        icon: Icons.check_circle_rounded,
-                        label: 'Kondisi',
-                        value: buku.kondisiBuku,
-                        color: const Color(0xFF558B2F),
-                      ),
+                          icon: Icons.check_circle_rounded,
+                          label: 'Kondisi',
+                          value: buku.kondisiBuku,
+                          color: const Color(0xFF558B2F)),
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 16),
 
                 // Detail card
@@ -149,14 +128,11 @@ class BukuDetailScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Informasi Detail',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: AppTheme.onBackground,
-                        ),
-                      ),
+                      const Text('Informasi Detail',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: AppTheme.onBackground)),
                       const SizedBox(height: 14),
                       _InfoRow(
                           icon: Icons.calendar_today_rounded,
@@ -166,6 +142,18 @@ class BukuDetailScreen extends StatelessWidget {
                           icon: Icons.numbers_rounded,
                           label: 'ISBN',
                           value: buku.isbn),
+                      _InfoRow(
+                          icon: Icons.category_rounded,
+                          label: 'ID Kategori',
+                          value: buku.idKategoriBuku),
+                      _InfoRow(
+                          icon: Icons.person_rounded,
+                          label: 'ID Penulis',
+                          value: buku.idPenulisBuku),
+                      _InfoRow(
+                          icon: Icons.business_rounded,
+                          label: 'ID Penerbit',
+                          value: buku.idPenerbitBuku),
                       _InfoRow(
                           icon: Icons.description_rounded,
                           label: 'Deskripsi',
@@ -204,34 +192,23 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
+              color: color.withOpacity(0.08),
+              blurRadius: 10,
+              offset: const Offset(0, 3))
         ],
       ),
       child: Column(
         children: [
           Icon(icon, color: color, size: 24),
           const SizedBox(height: 6),
-          Text(
-            value.isEmpty ? '-' : value,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-              fontSize: 13,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(value.isEmpty ? '-' : value,
+              style: TextStyle(
+                  color: color, fontWeight: FontWeight.bold, fontSize: 13),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis),
           const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              color: AppTheme.onSurface,
-              fontSize: 11,
-            ),
-          ),
+          Text(label,
+              style: TextStyle(color: AppTheme.onSurface, fontSize: 11)),
         ],
       ),
     );
@@ -260,9 +237,8 @@ class _InfoRow extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: AppTheme.primary.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(10),
-            ),
+                color: AppTheme.primary.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(10)),
             child: Icon(icon, color: AppTheme.primary, size: 18),
           ),
           const SizedBox(width: 12),
@@ -270,22 +246,14 @@ class _InfoRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: AppTheme.onSurface,
-                    fontSize: 11,
-                  ),
-                ),
+                Text(label,
+                    style: TextStyle(color: AppTheme.onSurface, fontSize: 11)),
                 const SizedBox(height: 2),
-                Text(
-                  value.isEmpty ? '-' : value,
-                  style: const TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                Text(value.isEmpty ? '-' : value,
+                    style: const TextStyle(
+                        color: AppTheme.onBackground,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500)),
               ],
             ),
           ),

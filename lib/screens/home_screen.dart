@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../core/theme/app_theme.dart';
+import '../providers/auth_provider.dart';
 import 'dashboard_screen.dart';
 import 'buku/buku_list_screen.dart';
-import 'peminjaman/peminjaman_list_screen.dart';
-import 'denda/denda_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,30 +15,37 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    DashboardScreen(),
-    BukuListScreen(),
-    PeminjamanListScreen(),
-    DendaListScreen(),
-  ];
-
-  final List<_NavItem> _navItems = const [
-    _NavItem(icon: Icons.dashboard_rounded, label: 'Dashboard'),
-    _NavItem(icon: Icons.menu_book_rounded, label: 'Buku'),
-    _NavItem(icon: Icons.swap_horiz_rounded, label: 'Peminjaman'),
-    _NavItem(icon: Icons.receipt_long_rounded, label: 'Denda'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn =
+        context.watch<AuthProvider>().status == AuthStatus.authenticated;
+
+    // Kalau sudah login, hanya tampilkan DashboardScreen tanpa bottom nav
+    if (isLoggedIn) {
+      return const DashboardScreen();
+    }
+
+    // Guest mode — 2 tab saja
+    const List<_NavItem> navItems = [
+      _NavItem(icon: Icons.dashboard_rounded, label: 'Dashboard'),
+      _NavItem(icon: Icons.menu_book_rounded, label: 'Buku'),
+    ];
+
+    const List<Widget> screens = [
+      DashboardScreen(),
+      BukuListScreen(),
+    ];
+
+    final safeIndex = _currentIndex < navItems.length ? _currentIndex : 0;
+
     return Scaffold(
       body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
+        index: safeIndex,
+        children: screens,
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.surface,
           boxShadow: [
             BoxShadow(
               color: AppTheme.primary.withOpacity(0.08),
@@ -52,8 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(_navItems.length, (i) {
-                final selected = _currentIndex == i;
+              children: List.generate(navItems.length, (i) {
+                final selected = safeIndex == i;
                 return GestureDetector(
                   onTap: () => setState(() => _currentIndex = i),
                   child: AnimatedContainer(
@@ -67,9 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          _navItems[i].icon,
+                          navItems[i].icon,
                           color:
                               selected ? AppTheme.primary : AppTheme.onSurface,
                           size: 22,
@@ -77,8 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (selected) ...[
                           const SizedBox(width: 6),
                           Text(
-                            _navItems[i].label,
-                            style: TextStyle(
+                            navItems[i].label,
+                            style: const TextStyle(
                               color: AppTheme.primary,
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
