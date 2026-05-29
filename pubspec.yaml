@@ -1,0 +1,30 @@
+name: perpustakaan_app
+description: Aplikasi Perpustakaan Flutter
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dio: ^5.4.0
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+  cupertino_icons: ^1.0.6
+  carousel_slider: ^5.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
