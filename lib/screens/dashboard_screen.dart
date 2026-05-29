@@ -49,10 +49,124 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _usernameController.text.trim(),
       _passwordController.text,
     );
-    if (mounted && auth.status == AuthStatus.authenticated) {
+    if (!mounted) return;
+    if (auth.status == AuthStatus.authenticated) {
       _usernameController.clear();
       _passwordController.clear();
+      _showSuccessDialog(auth.username);
+    } else if (auth.status == AuthStatus.error) {
+      _showErrorDialog(auth.errorMessage);
     }
+  }
+
+  void _showSuccessDialog(String username) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2E7D32).withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.check_circle_rounded,
+                    color: Color(0xFF2E7D32), size: 40),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Login Berhasil',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                  color: AppTheme.onBackground,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Selamat datang, $username',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13, color: AppTheme.onSurface),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: const Text('Lanjutkan'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // Auto-close setelah 2.5 detik
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    });
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: AppTheme.error.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child:
+                    Icon(Icons.cancel_rounded, color: AppTheme.error, size: 40),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Login Gagal',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                  color: AppTheme.onBackground,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Username atau password salah.',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13, color: AppTheme.onSurface),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: AppTheme.error),
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: const Text('Tutup'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -67,41 +181,92 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // AppBar
           SliverAppBar(
             pinned: true,
-            backgroundColor: AppTheme.primary,
+            backgroundColor: Colors.transparent,
             elevation: 0,
             automaticallyImplyLeading: false,
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppTheme.primary,
+                    AppTheme.primary.withOpacity(0.85),
+                    const Color(0xFF1B5E20),
+                  ],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primary.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+            ),
+            title: Row(
               children: [
-                Text(
-                  isLoggedIn ? 'Halo, ${auth.username}' : 'Selamat Datang',
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.local_library_rounded,
+                    color: Colors.white,
+                    size: 20,
                   ),
                 ),
-                const Text(
-                  'Sistem Perpustakaan',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isLoggedIn ? 'Halo, ${auth.username}' : 'Selamat Datang',
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 11,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                    const Text(
+                      'Sistem Perpustakaan',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
             actions: [
               if (isLoggedIn)
-                TextButton.icon(
-                  onPressed: () async {
-                    await context.read<AuthProvider>().logout();
-                    if (mounted) setState(() {});
-                  },
-                  icon: const Icon(Icons.logout_rounded,
-                      color: Colors.white70, size: 16),
-                  label: const Text(
-                    'Keluar',
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                    ),
+                    onPressed: () async {
+                      await context.read<AuthProvider>().logout();
+                      if (mounted) setState(() {});
+                    },
+                    icon: const Icon(Icons.logout_rounded,
+                        color: Colors.white, size: 14),
+                    label: const Text(
+                      'Keluar',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
                   ),
                 ),
             ],
@@ -109,13 +274,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           // Carousel banner
           SliverToBoxAdapter(
-            child: Column(
+            child: Stack(
               children: [
                 CarouselSlider.builder(
                   carouselController: _carouselController,
                   itemCount: _banners.length,
                   options: CarouselOptions(
-                    height: 200,
+                    height: 220,
                     autoPlay: true,
                     autoPlayInterval: const Duration(seconds: 5),
                     autoPlayAnimationDuration:
@@ -126,35 +291,68 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         setState(() => _currentBanner = index),
                   ),
                   itemBuilder: (context, index, _) {
-                    return Image.asset(
-                      _banners[index],
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      errorBuilder: (_, __, ___) =>
-                          Container(color: AppTheme.primary),
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.asset(
+                          _banners[index],
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder: (_, __, ___) => Container(
+                            color: AppTheme.primary,
+                            child: const Icon(Icons.image_not_supported,
+                                color: Colors.white54, size: 48),
+                          ),
+                        ),
+                        // Gradient overlay bawah
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withOpacity(0.35),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    _banners.length,
-                    (i) => AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: _currentBanner == i ? 20 : 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: _currentBanner == i
-                            ? AppTheme.primary
-                            : AppTheme.primary.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(4),
+                // Dots indicator overlay (glass style)
+                Positioned(
+                  bottom: 14,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      _banners.length,
+                      (i) => AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        width: _currentBanner == i ? 22 : 7,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          color: _currentBanner == i
+                              ? Colors.white
+                              : Colors.white.withOpacity(0.45),
+                          borderRadius: BorderRadius.circular(4),
+                          boxShadow: _currentBanner == i
+                              ? [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 4,
+                                  )
+                                ]
+                              : null,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -179,18 +377,78 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Login Admin',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: AppTheme.onBackground,
-          ),
-        ),
-        const SizedBox(height: 4),
-        const Text(
-          'Masuk untuk mengakses menu pengelolaan',
-          style: TextStyle(fontSize: 13, color: AppTheme.onSurface),
+        Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppTheme.primary,
+                    AppTheme.primary.withOpacity(0.7),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primary.withOpacity(0.25),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.admin_panel_settings_rounded,
+                color: Colors.white,
+                size: 22,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      'Login Admin',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppTheme.onBackground,
+                        letterSpacing: 0.1,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'Akses Terbatas',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.primary,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  'Masuk untuk mengakses menu pengelolaan',
+                  style: TextStyle(fontSize: 12, color: AppTheme.onSurface),
+                ),
+              ],
+            ),
+          ],
         ),
         const SizedBox(height: 20),
         Container(
@@ -221,7 +479,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
-                      auth.errorMessage,
+                      'Username atau password salah.',
                       style:
                           const TextStyle(color: AppTheme.error, fontSize: 13),
                     ),

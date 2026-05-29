@@ -7,7 +7,6 @@ import 'providers/buku_provider.dart';
 import 'providers/denda_provider.dart';
 import 'providers/peminjaman_provider.dart';
 import 'providers/penerbit_buku_provider.dart';
-import 'screens/auth/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'providers/jenis_buku_provider.dart';
 import 'providers/penulis_buku_provider.dart';
@@ -36,7 +35,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: const AuthWrapper(),
         routes: {
-          '/login': (_) => const LoginScreen(),
           '/home': (_) => const HomeScreen(),
         },
         theme: AppTheme.lightTheme,

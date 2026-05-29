@@ -21,11 +21,9 @@ class AppTheme {
     colorScheme: const ColorScheme.light(
       primary: primary,
       secondary: secondary,
-      background: background,
       surface: surface,
       error: error,
       onPrimary: onPrimary,
-      onBackground: onBackground,
       onSurface: onBackground,
     ),
     appBarTheme: const AppBarTheme(

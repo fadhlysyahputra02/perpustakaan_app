@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: Row(
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
@@ -82,17 +82,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               selected ? AppTheme.primary : AppTheme.onSurface,
                           size: 22,
                         ),
-                        if (selected) ...[
-                          const SizedBox(width: 6),
-                          Text(
-                            navItems[i].label,
-                            style: const TextStyle(
-                              color: AppTheme.primary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
+                        const SizedBox(height: 4),
+                        Text(
+                          navItems[i].label,
+                          style: TextStyle(
+                            color: selected
+                                ? AppTheme.primary
+                                : AppTheme.onSurface,
+                            fontWeight:
+                                selected ? FontWeight.w600 : FontWeight.normal,
+                            fontSize: 11,
                           ),
-                        ],
+                        ),
                       ],
                     ),
                   ),
