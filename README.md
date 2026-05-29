@@ -4,6 +4,26 @@ Aplikasi manajemen perpustakaan berbasis Flutter yang mengkonsumsi REST API dari
 
 ---
 
+## Screenshots
+
+| Login | Dashboard |
+|---|---|
+| ![Login](screenshots/login.png) | ![Dashboard](screenshots/dashboard.png) |
+
+| List Buku | Form Create |
+|---|---|
+| ![List Buku](screenshots/listbuku.png) | ![Form Create](screenshots/formcreate.png) |
+
+| List Peminjaman | List Denda |
+|---|---|
+| ![Peminjaman](screenshots/listpeminjaman.png) | ![Denda](screenshots/listdenda.png) |
+
+| Penulis Buku |
+|---|
+| ![Penulis Buku](screenshots/penulisbuku.png) |
+```
+
+
 ## Stack
 
 | Bagian | Teknologi |
